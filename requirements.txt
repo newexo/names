@@ -1,5 +1,6 @@
 numpy==1.19.5
 tensorflow==2.5.0
+tensorflow-datasets==4.3.0
 jedi==0.17.2
 jupyter
 environment_kernels
