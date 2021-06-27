@@ -1,0 +1,7 @@
+numpy==1.19.5
+tensorflow==2.5.0
+jedi==0.17.2
+jupyter
+environment_kernels
+pydot==1.4.1
+matplotlib==3.3.4
