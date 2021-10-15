@@ -2,6 +2,8 @@
 import unittest
 
 from names.tests.test_example import TestExample
+from names.tests.test_raw_data import TestRawData
+from names.tests.test_vectorize import TestVectorize
 
 
 class CountSuite(object):
@@ -19,6 +21,8 @@ def suite():
     s = CountSuite()
 
     s.add(TestExample)
+    s.add(TestRawData)
+    s.add(TestVectorize)
 
     return s.s
 
