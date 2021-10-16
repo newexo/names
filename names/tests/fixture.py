@@ -1,5 +1,6 @@
 from names import raw_data, vectorize
 
+
 class Fixture:
     def __init__(self):
         self.raw = raw_data.load_raw("data/names.txt")
