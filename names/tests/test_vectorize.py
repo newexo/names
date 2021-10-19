@@ -101,7 +101,7 @@ class TestVectorize(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_vocab_size(self):
-        self.assertEqual(len(self.fixture.vocab), self.vectorator.vocab_size)
+        self.assertEqual(len(self.fixture.vocab) + 1, self.vectorator.vocab_size)
 
     def test_ids_from_chars(self):
         chars = vectorize.unicode_split(self.example_text)

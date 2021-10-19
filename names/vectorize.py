@@ -35,7 +35,7 @@ class Vectorator:
 
     @property
     def vocab_size(self):
-        return self.chars_from_ids.vocabulary_size() - 1
+        return self.chars_from_ids.vocabulary_size()
 
 
 class DataSet(Vectorator):
