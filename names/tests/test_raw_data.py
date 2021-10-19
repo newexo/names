@@ -12,7 +12,7 @@ class TestRawData(unittest.TestCase):
         pass
 
     def test_load_unicode_without_error(self):
-        # first check a few name
+        # first check a few names
         expected = "Adray Lasbard"
         actual = self.fixture.raw[0]
         self.assertEqual(expected, actual)
