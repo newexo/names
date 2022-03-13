@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import unittest
 
+from names.tests.test_checkpoint import TestCheck
+from names.tests.test_directories import TestDirectories
 from names.tests.test_example import TestExample
 from names.tests.test_raw_data import TestRawData
 from names.tests.test_vectorize import TestVectorize
@@ -20,6 +22,8 @@ class CountSuite(object):
 def suite():
     s = CountSuite()
 
+    s.add(TestCheck)
+    s.add(TestDirectories)
     s.add(TestExample)
     s.add(TestRawData)
     s.add(TestVectorize)

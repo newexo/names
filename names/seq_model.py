@@ -1,5 +1,4 @@
 import tensorflow as tf
-import os
 
 
 class SeqModel(tf.keras.Model):
@@ -37,19 +36,15 @@ class SeqModel(tf.keras.Model):
         )
 
 
-class CheckPoint:
-    def __init__(self, checkpoint_dir="./training_checkpoints", prefix="ckpt_{epoch}"):
-        checkpoint_dir = os.path.abspath(checkpoint_dir)
-        # Name of the checkpoint files
-        checkpoint_prefix = os.path.join(checkpoint_dir, prefix)
-
-        self.checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-            filepath=checkpoint_prefix, save_weights_only=True
-        )
-
-
 class OneStep(tf.keras.Model):
-    def __init__(self, model, vectorator=None, chars_from_ids=None, ids_from_chars=None, temperature=1.0):
+    def __init__(
+        self,
+        model,
+        vectorator=None,
+        chars_from_ids=None,
+        ids_from_chars=None,
+        temperature=1.0,
+    ):
         super().__init__()
         self.temperature = temperature
         self.model = model
