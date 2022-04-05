@@ -1,26 +1,44 @@
 import tensorflow as tf
 
 
-class SeqModel(tf.keras.Model):
+class Hypers:
     def __init__(self, vocab_size, embedding_dim, rnn_units):
+        self.vocab_size = vocab_size
+        self.embedding_dim = embedding_dim
+        if not hasattr(rnn_units, "__iter__"):
+            rnn_units = [rnn_units]
+        self.rnn_units = rnn_units
+
+
+class SeqModel(tf.keras.Model):
+    def __init__(self, hypers: Hypers):
         super().__init__(self)
-        self.embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim)
-        self.gru = tf.keras.layers.GRU(
-            rnn_units, return_sequences=True, return_state=True
+        self.embedding = tf.keras.layers.Embedding(
+            hypers.vocab_size, hypers.embedding_dim
         )
-        self.dense = tf.keras.layers.Dense(vocab_size)
+        self.grus = [
+            tf.keras.layers.GRU(rnn_units, return_sequences=True, return_state=True)
+            for rnn_units in hypers.rnn_units
+        ]
+        self.dense = tf.keras.layers.Dense(hypers.vocab_size)
         self.loss = tf.losses.SparseCategoricalCrossentropy(from_logits=True)
 
     def call(self, inputs, states=None, return_state=False, training=False):
         x = inputs
         x = self.embedding(x, training=training)
+        gru = self.grus[0]
         if states is None:
-            states = self.gru.get_initial_state(x)
-        x, states = self.gru(x, initial_state=states, training=training)
+            states = [None] * len(self.grus)
+        new_states = []
+        for states, gru in zip(states, self.grus):
+            if states is None:
+                states = gru.get_initial_state(x)
+            x, new_state = gru(x, initial_state=states, training=training)
+            new_states.append(new_state)
         x = self.dense(x, training=training)
 
         if return_state:
-            return x, states
+            return x, new_states
         else:
             return x
 
