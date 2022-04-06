@@ -1,32 +1,47 @@
 import tensorflow as tf
 
+from names import vectorize
+
 
 class Hypers:
-    def __init__(self, vocab_size, embedding_dim, rnn_units):
-        self.vocab_size = vocab_size
+    def __init__(self, embedding_dim, rnn_units):
         self.embedding_dim = embedding_dim
         if not hasattr(rnn_units, "__iter__"):
             rnn_units = [rnn_units]
         self.rnn_units = rnn_units
 
+    @staticmethod
+    def restore(d):
+        return Hypers(d["embedding_dim"], d["rnn_units"])
+
+    def to_dict(self):
+        return {
+            "embedding_dim": self.embedding_dim,
+            "rnn_units": self.rnn_units,
+        }
+
 
 class SeqModel(tf.keras.Model):
-    def __init__(self, hypers: Hypers):
+    def __init__(self, vocab, hypers: Hypers=None, embedding_dim=None, rnn_units=None):
         super().__init__(self)
+        self.vocab = vocab
+        self.vectorator = vectorize.Vectorator(vocab)
+        if hypers is None:
+            hypers = Hypers(embedding_dim, rnn_units)
+        self.hypers = hypers
         self.embedding = tf.keras.layers.Embedding(
-            hypers.vocab_size, hypers.embedding_dim
+            self.vectorator.vocab_size, hypers.embedding_dim
         )
         self.grus = [
             tf.keras.layers.GRU(rnn_units, return_sequences=True, return_state=True)
             for rnn_units in hypers.rnn_units
         ]
-        self.dense = tf.keras.layers.Dense(hypers.vocab_size)
+        self.dense = tf.keras.layers.Dense(self.vectorator.vocab_size)
         self.loss = tf.losses.SparseCategoricalCrossentropy(from_logits=True)
 
     def call(self, inputs, states=None, return_state=False, training=False):
         x = inputs
         x = self.embedding(x, training=training)
-        gru = self.grus[0]
         if states is None:
             states = [None] * len(self.grus)
         new_states = []
@@ -46,31 +61,30 @@ class SeqModel(tf.keras.Model):
         self.compile(optimizer="adam", loss=self.loss)
 
     def fit_with_chk(self, ds, checkpoint, epochs, initial_epoch=0):
-        return self.fit(
-            ds.dataset,
-            epochs=epochs,
-            callbacks=[checkpoint.checkpoint_callback],
-            initial_epoch=initial_epoch,
-        )
+        if checkpoint.checkpoint_callback is None:
+            return self.fit(
+                ds.dataset,
+                epochs=epochs,
+                initial_epoch=initial_epoch,
+            )
+        else:
+            return self.fit(
+                ds.dataset,
+                epochs=epochs,
+                callbacks=[checkpoint.checkpoint_callback],
+                initial_epoch=initial_epoch,
+            )
 
 
 class OneStep(tf.keras.Model):
     def __init__(
         self,
-        model,
-        vectorator=None,
-        chars_from_ids=None,
-        ids_from_chars=None,
+        model: SeqModel,
         temperature=1.0,
     ):
         super().__init__()
         self.temperature = temperature
         self.model = model
-        if vectorator is not None:
-            chars_from_ids = vectorator.chars_from_ids
-            ids_from_chars = vectorator.ids_from_chars
-        self.chars_from_ids = chars_from_ids
-        self.ids_from_chars = ids_from_chars
 
         # Create a mask to prevent "[UNK]" from being generated.
         skip_ids = self.ids_from_chars(["[UNK]"])[:, None]
@@ -79,9 +93,18 @@ class OneStep(tf.keras.Model):
             values=[-float("inf")] * len(skip_ids),
             indices=skip_ids,
             # Match the shape to the vocabulary
-            dense_shape=[len(ids_from_chars.get_vocabulary())],
+            dense_shape=[len(self.ids_from_chars.get_vocabulary())],
         )
         self.prediction_mask = tf.sparse.to_dense(sparse_mask)
+
+    @property
+    def chars_from_ids(self):
+        return self.model.vectorator.chars_from_ids
+
+    @property
+    def ids_from_chars(self):
+        return self.model.vectorator.ids_from_chars
+
 
     @tf.function
     def generate_one_step(self, inputs, states=None):

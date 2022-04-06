@@ -1,12 +1,13 @@
 import unittest
-import os, shutil
+import os
+import shutil
 
 from names import check, directories
 
 
 class TestCheck(unittest.TestCase):
     def setUp(self):
-        self.check_path = directories.test_data('test_check')
+        self.check_path = directories.test_data("test_check")
         if os.path.isdir(self.check_path):
             shutil.rmtree(self.check_path),
 
@@ -25,8 +26,12 @@ class TestCheck(unittest.TestCase):
         actual = ch_default.checkpoint_prefix
         self.assertEqual(expected, actual)
 
-        ch_specific = check.CheckPoint(base=self.check_path, checkpoint_dir='cool_training_checkpoints', prefix='cool_ckpt')
-        expected = os.path.join(self.check_path, 'cool_training_checkpoints')
+        ch_specific = check.CheckPoint(
+            base=self.check_path,
+            checkpoint_dir="cool_training_checkpoints",
+            prefix="cool_ckpt",
+        )
+        expected = os.path.join(self.check_path, "cool_training_checkpoints")
         actual = ch_specific.checkpoint_dir
         self.assertEqual(expected, actual)
         expected = os.path.join(expected, "cool_ckpt_{epoch}")
@@ -34,7 +39,11 @@ class TestCheck(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_file_names(self):
-        ch_specific = check.CheckPoint(base=self.check_path, checkpoint_dir='cool_training_checkpoints', prefix='cool_ckpt')
+        ch_specific = check.CheckPoint(
+            base=self.check_path,
+            checkpoint_dir="cool_training_checkpoints",
+            prefix="cool_ckpt",
+        )
 
         expected = os.path.join(self.check_path, "info.json")
         actual = ch_specific.info_path
@@ -51,24 +60,36 @@ class TestCheck(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_create_directories(self):
-        ch_specific = check.CheckPoint(base=self.check_path, checkpoint_dir='cool_training_checkpoints', prefix='cool_ckpt')
+        ch_specific = check.CheckPoint(
+            base=self.check_path,
+            checkpoint_dir="cool_training_checkpoints",
+            prefix="cool_ckpt",
+        )
         ch_specific.create_dirs()
 
         self.assertTrue(os.path.isdir(self.check_path))
         self.assertTrue(os.path.isdir(ch_specific.checkpoint_dir))
 
     def test_save_info(self):
-        ch_specific = check.CheckPoint(base=self.check_path, checkpoint_dir='cool_training_checkpoints', prefix='cool_ckpt')
+        ch_specific = check.CheckPoint(
+            base=self.check_path,
+            checkpoint_dir="cool_training_checkpoints",
+            prefix="cool_ckpt",
+        )
         ch_specific.save_info()
         path = os.path.join(ch_specific.base, "info.json")
         self.assertTrue(os.path.exists(path))
 
     def test_load_info(self):
-        ch_specific = check.CheckPoint(base=self.check_path, checkpoint_dir='cool_training_checkpoints', prefix='cool_ckpt')
+        ch_specific = check.CheckPoint(
+            base=self.check_path,
+            checkpoint_dir="cool_training_checkpoints",
+            prefix="cool_ckpt",
+        )
         ch_specific.save_info()
 
-        ch_reload = check.CheckPoint(base=self.check_path, reload=True)
-        expected = os.path.join(self.check_path, 'cool_training_checkpoints')
+        ch_reload = check.CheckPoint(base=self.check_path)
+        expected = os.path.join(self.check_path, "cool_training_checkpoints")
         actual = ch_reload.checkpoint_dir
         self.assertEqual(expected, actual)
         expected = os.path.join(expected, "cool_ckpt_{epoch}")
