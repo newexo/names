@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import unittest
 
+from names.tests.test_census import TestCensus
 from names.tests.test_checkpoint import TestCheck
 from names.tests.test_directories import TestDirectories
 from names.tests.test_example import TestExample
@@ -23,6 +24,7 @@ class CountSuite(object):
 def suite():
     s = CountSuite()
 
+    s.add(TestCensus)
     s.add(TestCheck)
     s.add(TestDirectories)
     s.add(TestExample)
