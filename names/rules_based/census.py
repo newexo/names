@@ -10,6 +10,7 @@ def yob_filename(year):
 def yob(year):
     df = pd.read_csv(yob_filename(year), names=["name", "gender", "count"])
     df["year"] = year
+    df["source"] = "US census"
     return df
 
 

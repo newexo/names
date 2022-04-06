@@ -3,6 +3,7 @@ import unittest
 
 from names.tests.test_census import TestCensus
 from names.tests.test_checkpoint import TestCheck
+from names.tests.test_data_from_file import TestDataFromFile
 from names.tests.test_directories import TestDirectories
 from names.tests.test_example import TestExample
 from names.tests.test_raw_data import TestRawData
@@ -26,6 +27,7 @@ def suite():
 
     s.add(TestCensus)
     s.add(TestCheck)
+    s.add(TestDataFromFile)
     s.add(TestDirectories)
     s.add(TestExample)
     s.add(TestRawData)
