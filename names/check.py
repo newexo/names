@@ -4,7 +4,12 @@ import pickle
 
 import tensorflow as tf
 
-from names import directories, seq_model, vectorize
+from names import directories, seq_model
+
+
+def default_vocab():
+    with open(directories.data("vocab.pkl"), "rb") as f:
+        return pickle.load(f)
 
 
 class CheckPoint:
