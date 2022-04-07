@@ -116,24 +116,40 @@ def female_halfling_df():
 def male_halfling_df():
     return gendered_df("halfling", True)
 
+
 def list_elf_names(race, using_male):
     found = gendered_from_file(race, using_male)
     permuted = permuted_elf_names(using_male)
     return found + permuted
 
+
 def female_elf_df():
-   return gendered_df("elf", False, list_elf_names)
+    return gendered_df("elf", False, list_elf_names)
 
 
 def male_elf_df():
-   return gendered_df("elf", True, list_elf_names)
+    return gendered_df("elf", True, list_elf_names)
+
+
+def female_dwarf_df():
+    return gendered_df(
+        "dwarf", False, lambda race, using_male: permuted_dwarf_names(using_male)
+    )
+
+
+def male_dwarf_df():
+    return gendered_df(
+        "dwarf", True, lambda race, using_male: permuted_dwarf_names(using_male)
+    )
 
 
 def name_parts(filename, part_names):
-    return [filter_strip_file(
+    return [
+        filter_strip_file(
             filename, lambda line: is_tagged(part_name, line), should_capitalize=False
-        ) for part_name in part_names
-        ]
+        )
+        for part_name in part_names
+    ]
 
 
 def elf_part_names(is_male):
@@ -148,10 +164,29 @@ def permuted_elf_names(is_male):
     parts = elf_part_names(is_male)
     parts["in"].append("")
     names = []
-    for pre in parts['pre']:
-        for mid in parts['in']:
-            for suf in parts['suf']:
+    for pre in parts["pre"]:
+        for mid in parts["in"]:
+            for suf in parts["suf"]:
                 name = pre + mid + suf
                 name = name.capitalize()
                 names.append(name)
+    return names
+
+
+def dwarf_part_names(is_male):
+    letter = "m" if is_male else "f"
+    part_names = ["pre", "suf"]
+    gendered_part_names = ["pre", letter + "suf"]
+    parts = name_parts("dwarf_names.txt", gendered_part_names)
+    return {part_name: part for part_name, part in zip(part_names, parts)}
+
+
+def permuted_dwarf_names(is_male):
+    parts = dwarf_part_names(is_male)
+    names = []
+    for pre in parts["pre"]:
+        for suf in parts["suf"]:
+            name = pre + suf
+            name = name.capitalize()
+            names.append(name)
     return names

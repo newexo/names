@@ -37,28 +37,42 @@ class TestNPC(unittest.TestCase):
         expected = {"gender": "M", "name": "Geirstein", "source": "npc male human"}
         self.assertEqual(expected, actual)
 
-    # def test_female_dwarf_df(self):
-    #     self.fail("incomplete")
-    #
-    # def test_male_dwarf_df(self):
-    #     self.fail("incomplete")
+    def test_female_dwarf_df(self):
+        df = npc_gen.female_dwarf_df()
+        self.assertEqual(45 * 13, df.name.count())
+        expected = ["name", "gender", "source"]
+        actual = list(df.columns)
+        self.assertEqual(expected, actual)
+        actual = df.iloc[100].to_dict()
+        expected = {"gender": "F", "name": "Dornal", "source": "npc female dwarf"}
+        self.assertEqual(expected, actual)
+
+    def test_male_dwarf_df(self):
+        df = npc_gen.male_dwarf_df()
+        self.assertEqual(45 * 15, df.name.count())
+        expected = ["name", "gender", "source"]
+        actual = list(df.columns)
+        self.assertEqual(expected, actual)
+        actual = df.iloc[100].to_dict()
+        expected = {"gender": "M", "name": "Dkil", "source": "npc male dwarf"}
+        self.assertEqual(expected, actual)
 
     def test_female_elf_df(self):
         df = npc_gen.female_elf_df()
-        self.assertEqual(10+ 10 * 10 * 9, df.name.count())
+        self.assertEqual(10 + 10 * 10 * 9, df.name.count())
         expected = ["name", "gender", "source"]
         actual = list(df.columns)
         self.assertEqual(expected, actual)
         actual = df.iloc[5].to_dict()
-        expected = {'gender': 'F', 'name': 'Lia', 'source': 'npc female elf'}
+        expected = {"gender": "F", "name": "Lia", "source": "npc female elf"}
         self.assertEqual(expected, actual)
 
         actual = df.iloc[10].to_dict()
-        expected = {'gender': 'F', 'name': 'Anastrianna', 'source': 'npc female elf'}
+        expected = {"gender": "F", "name": "Anastrianna", "source": "npc female elf"}
         self.assertEqual(expected, actual)
 
         actual = df.iloc[10 + 501].to_dict()
-        expected = {'gender': 'F', 'name': 'Liquiqui', 'source': 'npc female elf'}
+        expected = {"gender": "F", "name": "Liquiqui", "source": "npc female elf"}
         self.assertEqual(expected, actual)
 
     def test_male_elf_df(self):
@@ -68,27 +82,27 @@ class TestNPC(unittest.TestCase):
         actual = list(df.columns)
         self.assertEqual(expected, actual)
         actual = df.iloc[5].to_dict()
-        expected = {'gender': 'M', 'name': 'Ivellios', 'source': 'npc male elf'}
+        expected = {"gender": "M", "name": "Ivellios", "source": "npc male elf"}
         self.assertEqual(expected, actual)
 
         actual = df.iloc[10].to_dict()
-        expected = {'gender': 'M', 'name': 'Aravil', 'source': 'npc male elf'}
+        expected = {"gender": "M", "name": "Aravil", "source": "npc male elf"}
         self.assertEqual(expected, actual)
 
         actual = df.iloc[10 + 301].to_dict()
-        expected = {'gender': 'M', 'name': 'Thamimo', 'source': 'npc male elf'}
+        expected = {"gender": "M", "name": "Thamimo", "source": "npc male elf"}
         self.assertEqual(expected, actual)
 
     def test_female_elf_permuted_names(self):
         names = npc_gen.permuted_elf_names(False)
         self.assertEqual(10 * 10 * 9, len(names))
-        self.assertEqual('Anastrianna', names[0])
+        self.assertEqual("Anastrianna", names[0])
         self.assertEqual("Liquiqui", names[501])
 
     def test_male_elf_permuted_names(self):
         names = npc_gen.permuted_elf_names(True)
         self.assertEqual(10 * 4 * 9, len(names))
-        self.assertEqual('Aravil', names[0])
+        self.assertEqual("Aravil", names[0])
         self.assertEqual("Thamimo", names[301])
 
     def test_female_gnome_df(self):
@@ -98,7 +112,7 @@ class TestNPC(unittest.TestCase):
         actual = list(df.columns)
         self.assertEqual(expected, actual)
         actual = df.iloc[5].to_dict()
-        expected = {'gender': 'F', 'name': 'Loopmottin', 'source': 'npc female gnome'}
+        expected = {"gender": "F", "name": "Loopmottin", "source": "npc female gnome"}
         self.assertEqual(expected, actual)
 
     def test_male_gnome_df(self):
@@ -108,7 +122,7 @@ class TestNPC(unittest.TestCase):
         actual = list(df.columns)
         self.assertEqual(expected, actual)
         actual = df.iloc[5].to_dict()
-        expected = {'gender': 'M', 'name': 'Jebeddo', 'source': 'npc male gnome'}
+        expected = {"gender": "M", "name": "Jebeddo", "source": "npc male gnome"}
         self.assertEqual(expected, actual)
 
     def test_female_halfling_df(self):
@@ -118,7 +132,7 @@ class TestNPC(unittest.TestCase):
         actual = list(df.columns)
         self.assertEqual(expected, actual)
         actual = df.iloc[5].to_dict()
-        expected = {'gender': 'F', 'name': 'Lavinia', 'source': 'npc female halfling'}
+        expected = {"gender": "F", "name": "Lavinia", "source": "npc female halfling"}
         self.assertEqual(expected, actual)
 
     def test_male_halfling_df(self):
@@ -128,14 +142,8 @@ class TestNPC(unittest.TestCase):
         actual = list(df.columns)
         self.assertEqual(expected, actual)
         actual = df.iloc[5].to_dict()
-        expected = {'gender': 'M', 'name': 'Lyle', 'source': 'npc male halfling'}
+        expected = {"gender": "M", "name": "Lyle", "source": "npc male halfling"}
         self.assertEqual(expected, actual)
-
-    # def test_female_monster_df(self):
-    #     self.fail("incomplete")
-    #
-    # def test_male_monster_df(self):
-    #     self.fail("incomplete")
 
     def test_count_tags(self):
         expected = [0, 2, 1, 1, 4, 1]
@@ -185,23 +193,201 @@ class TestNPC(unittest.TestCase):
     def test_female_elf_partnames(self):
         partnames = npc_gen.elf_part_names(False)
         self.assertEqual(3, len(partnames))
-        pre = partnames['pre']
-        mid = partnames['in']
-        suf = partnames['suf']
+        pre = partnames["pre"]
+        mid = partnames["in"]
+        suf = partnames["suf"]
         self.assertEqual(10, len(pre))
         self.assertEqual(9, len(mid))
         self.assertEqual(9, len(suf))
-        expected = {'pre': ['ana', 'anti', 'drusi', 'felo', 'iele', 'li', 'qilla', 'sila', 'vala', 'xana'], 'in': ['stria', 'nu', 'si', 'ni', 'la', 'qui', 'qua', 'nthe', 'phi'], 'suf': ['nna', 'nua', 'lia', 'sial', 'nia', 'the', 'qui', 'nthe', 'phia']}
+        expected = {
+            "pre": [
+                "ana",
+                "anti",
+                "drusi",
+                "felo",
+                "iele",
+                "li",
+                "qilla",
+                "sila",
+                "vala",
+                "xana",
+            ],
+            "in": ["stria", "nu", "si", "ni", "la", "qui", "qua", "nthe", "phi"],
+            "suf": ["nna", "nua", "lia", "sial", "nia", "the", "qui", "nthe", "phia"],
+        }
         self.assertEqual(expected, partnames)
 
     def test_male_elf_partnames(self):
         partnames = npc_gen.elf_part_names(True)
         self.assertEqual(3, len(partnames))
-        pre = partnames['pre']
-        mid = partnames['in']
-        suf = partnames['suf']
+        pre = partnames["pre"]
+        mid = partnames["in"]
+        suf = partnames["suf"]
         self.assertEqual(10, len(pre))
         self.assertEqual(3, len(mid))
         self.assertEqual(9, len(suf))
-        expected = {'pre': ['ara', 'a', 'enia', 'he', 'himo', 'ivelli', 'lauci', 'quari', 'thami', 'thari'], 'in': ['v', 'm', 'l'], 'suf': ['il', 'ust', 'is', 'ian', 'o', 'os', 'on', 'or', 'ol']}
+        expected = {
+            "pre": [
+                "ara",
+                "a",
+                "enia",
+                "he",
+                "himo",
+                "ivelli",
+                "lauci",
+                "quari",
+                "thami",
+                "thari",
+            ],
+            "in": ["v", "m", "l"],
+            "suf": ["il", "ust", "is", "ian", "o", "os", "on", "or", "ol"],
+        }
+        self.assertEqual(expected, partnames)
+
+    def test_female_dwarf_partnames(self):
+        partnames = npc_gen.dwarf_part_names(False)
+        self.assertEqual(2, len(partnames))
+        pre = partnames["pre"]
+        suf = partnames["suf"]
+        self.assertEqual(45, len(pre))
+        self.assertEqual(13, len(suf))
+        expected = {
+            "pre": [
+                "bal",
+                "belf",
+                "bif",
+                "bof",
+                "bol",
+                "bomb",
+                "d",
+                "dor",
+                "dorf",
+                "dur",
+                "dwal",
+                "gar",
+                "fil",
+                "gil",
+                "gol",
+                "gor",
+                "kon",
+                "kor",
+                "kur",
+                "mor",
+                "na",
+                "no",
+                "nor",
+                "o",
+                "or",
+                "thor",
+                "thra",
+                "thro",
+                "tor",
+                "whar",
+                "ulf",
+                "art",
+                "aud",
+                "dag",
+                "gunn",
+                "bar",
+                "brott",
+                "eb",
+                "ein",
+                "osk",
+                "rur",
+                "tak",
+                "hl",
+                "lift",
+                "torgg",
+            ],
+            "suf": [
+                "a",
+                "as",
+                "i",
+                "ia",
+                "if",
+                "il",
+                "is",
+                "la",
+                "hild",
+                "nal",
+                "loda",
+                "rasa",
+                "ga",
+            ],
+        }
+        self.assertEqual(expected, partnames)
+
+    def test_male_dwarf_partnames(self):
+        partnames = npc_gen.dwarf_part_names(True)
+        self.assertEqual(2, len(partnames))
+        pre = partnames["pre"]
+        suf = partnames["suf"]
+        self.assertEqual(45, len(pre))
+        self.assertEqual(15, len(suf))
+        expected = {
+            "pre": [
+                "bal",
+                "belf",
+                "bif",
+                "bof",
+                "bol",
+                "bomb",
+                "d",
+                "dor",
+                "dorf",
+                "dur",
+                "dwal",
+                "gar",
+                "fil",
+                "gil",
+                "gol",
+                "gor",
+                "kon",
+                "kor",
+                "kur",
+                "mor",
+                "na",
+                "no",
+                "nor",
+                "o",
+                "or",
+                "thor",
+                "thra",
+                "thro",
+                "tor",
+                "whar",
+                "ulf",
+                "art",
+                "aud",
+                "dag",
+                "gunn",
+                "bar",
+                "brott",
+                "eb",
+                "ein",
+                "osk",
+                "rur",
+                "tak",
+                "hl",
+                "lift",
+                "torgg",
+            ],
+            "suf": [
+                "ar",
+                "ed",
+                "ic",
+                "in",
+                "lum",
+                "or",
+                "to",
+                "ur",
+                "endd",
+                "erk",
+                "kil",
+                "ik",
+                "linn",
+                "bon",
+                "gar",
+            ],
+        }
         self.assertEqual(expected, partnames)
