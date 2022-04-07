@@ -129,7 +129,7 @@ class TestVectorize(unittest.TestCase):
 
     def test_data_set(self):
         ds = vectorize.DataSet(self.fixture.text)
-        self.assertEqual(1350, ds.examples_per_epoch)
+        self.assertEqual(1342, ds.examples_per_epoch)
         for foo in ds.dataset.take(1):
             actual = [bar.shape for bar in foo]
             expected = [[64, 100], [64, 100]]

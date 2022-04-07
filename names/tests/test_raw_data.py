@@ -1,6 +1,7 @@
 import unittest
 import hashlib
 
+from names.raw_data import join_raw
 from . import fixture
 
 
@@ -40,5 +41,11 @@ class TestRawData(unittest.TestCase):
         # so far so good, but there were invalid bytes later in the file
         # compute the hash and check the whole thing
         actual = hashlib.sha1(self.fixture.text.encode("utf8")).hexdigest()
-        expected = "3cb92c5d0c260d010ae31b9a8031a50ce6bb8a4c"
+        expected = "c88737d1e71350a525b699b0c07d3118bcac6303"
+        self.assertEqual(expected, actual)
+
+    def test_lines_with_overflow(self):
+        lines = ["", "12", "12345", "123"]
+        expected = "    \n12  \n1234\n123 "
+        actual = join_raw(lines, ljust=4)
         self.assertEqual(expected, actual)

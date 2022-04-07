@@ -8,6 +8,7 @@ from names.tests.test_directories import TestDirectories
 from names.tests.test_example import TestExample
 from names.tests.test_npc import TestNPC
 from names.tests.test_raw_data import TestRawData
+from names.tests.test_sample_from_dfs import TestSampleFromDfs
 from names.tests.test_seq_model import TestSeqModel
 from names.tests.test_vectorize import TestVectorize
 
@@ -33,6 +34,7 @@ def suite():
     s.add(TestExample)
     s.add(TestNPC)
     s.add(TestRawData)
+    s.add(TestSampleFromDfs)
     s.add(TestSeqModel)
     s.add(TestVectorize)
 
