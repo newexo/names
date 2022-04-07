@@ -145,11 +145,6 @@ class TestNPC(unittest.TestCase):
         expected = {"gender": "M", "name": "Lyle", "source": "npc male halfling"}
         self.assertEqual(expected, actual)
 
-    def test_count_tags(self):
-        expected = [0, 2, 1, 1, 4, 1]
-        actual = [npc_gen.count_tags(line) for line in self.lines]
-        self.assertEqual(expected, actual)
-
     def test_find_tags(self):
         expected = [
             [],

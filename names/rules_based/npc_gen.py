@@ -9,26 +9,7 @@ def npc_filename(filename):
     return directories.qualifyname(path, filename)
 
 
-def humans():
-    with open(npc_filename("human_names.txt")) as f:
-        return [line.strip() for line in f if len(line.strip())]
-
-
-def female_humans():
-    hn = humans()
-    return [line[4:] for line in hn if line[:4] == "[F]="]
-
-
-def male_humans():
-    hn = humans()
-    return [line[4:] for line in hn if line[:4] == "[M]="]
-
-
 tag_regx = re.compile(r"\[([^\]]+)\]=?")
-
-
-def count_tags(line):
-    return len(tag_regx.findall(line))
 
 
 def find_tags(line):
@@ -44,24 +25,12 @@ def is_tagged(tag, line):
     return len(tags) == 1 and tags[0] == tag
 
 
-def find_tagged(tag, f):
-    return [strip_tags(line) for line in f if is_tagged(tag, line)]
-
-
 def is_female(line):
     return is_tagged("F", line) or is_tagged("F'", line)
 
 
-def find_females(f):
-    return [strip_tags(line) for line in f if is_female(line)]
-
-
 def is_male(line):
     return is_tagged("M", line) or is_tagged("M'", line)
-
-
-def find_males(f):
-    return [strip_tags(line) for line in f if is_female(line)]
 
 
 def filter_strip_file(filename, pred, should_capitalize=True):
