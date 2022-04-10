@@ -71,13 +71,14 @@ class CheckPoint:
         self.save_info()
         with open(self.vocab_path, "wb") as f:
             pickle.dump(model.vocab, f)
-        model.save_weights(self.model_path)
+        model.save_weights(self.model_path,)
 
     def load(self):
+        if not os.path.exists(self.info_path):
+            return None
         self.load_info()
         with open(self.vocab_path, "rb") as f:
             vocab = pickle.load(f)
         model = seq_model.SeqModel(vocab, seq_model.Hypers.restore(self.d["hypers"]))
         model.load_weights(self.model_path)
-        model.compile_model()
         return model

@@ -28,7 +28,7 @@ class TestNPC(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_male_humans_df(self):
-        df = npc_gen.male_humans_df()
+        df = npc_gen.male_human_df()
         self.assertEqual(357, df.name.count())
         expected = ["name", "gender", "source"]
         actual = list(df.columns)

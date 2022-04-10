@@ -62,54 +62,10 @@ def gendered_df(race, using_male, make_names=gendered_from_file):
     return df
 
 
-def female_human_df():
-    return gendered_df("human", False)
-
-
-def male_humans_df():
-    return gendered_df("human", True)
-
-
-def female_gnome_df():
-    return gendered_df("gnome", False)
-
-
-def male_gnome_df():
-    return gendered_df("gnome", True)
-
-
-def female_halfling_df():
-    return gendered_df("halfling", False)
-
-
-def male_halfling_df():
-    return gendered_df("halfling", True)
-
-
 def list_elf_names(race, using_male):
     found = gendered_from_file(race, using_male)
     permuted = permuted_elf_names(using_male)
     return found + permuted
-
-
-def female_elf_df():
-    return gendered_df("elf", False, list_elf_names)
-
-
-def male_elf_df():
-    return gendered_df("elf", True, list_elf_names)
-
-
-def female_dwarf_df():
-    return gendered_df(
-        "dwarf", False, lambda race, using_male: permuted_dwarf_names(using_male)
-    )
-
-
-def male_dwarf_df():
-    return gendered_df(
-        "dwarf", True, lambda race, using_male: permuted_dwarf_names(using_male)
-    )
 
 
 def name_parts(filename, part_names):
@@ -159,3 +115,62 @@ def permuted_dwarf_names(is_male):
             name = name.capitalize()
             names.append(name)
     return names
+
+
+def female_human_df():
+    return gendered_df("human", False)
+
+
+def male_human_df():
+    return gendered_df("human", True)
+
+
+def female_gnome_df():
+    return gendered_df("gnome", False)
+
+
+def male_gnome_df():
+    return gendered_df("gnome", True)
+
+
+def female_halfling_df():
+    return gendered_df("halfling", False)
+
+
+def male_halfling_df():
+    return gendered_df("halfling", True)
+
+
+def female_elf_df():
+    return gendered_df("elf", False, list_elf_names)
+
+
+def male_elf_df():
+    return gendered_df("elf", True, list_elf_names)
+
+
+def female_dwarf_df():
+    return gendered_df(
+        "dwarf", False, lambda race, using_male: permuted_dwarf_names(using_male)
+    )
+
+
+def male_dwarf_df():
+    return gendered_df(
+        "dwarf", True, lambda race, using_male: permuted_dwarf_names(using_male)
+    )
+
+
+def all_dfs():
+    return [
+        female_dwarf_df(),
+        female_elf_df(),
+        female_gnome_df(),
+        female_halfling_df(),
+        female_human_df(),
+        male_dwarf_df(),
+        male_elf_df(),
+        male_gnome_df(),
+        male_halfling_df(),
+        male_human_df(),
+    ]
